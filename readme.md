@@ -15,4 +15,4 @@ Next Figure describes the methodological process employed for the development of
 
 ## References
 
-Detailed description of the project can be find on the on the Article: [Machine Learning Techniques Applied to the Classification of Breast Cancer Recurrence]()
+Detailed description of the project can be find on the on the Article: [Machine Learning Techniques Applied to the Classification of Breast Cancer Recurrence](https://is.gd/OOfN45)
