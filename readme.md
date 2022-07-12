@@ -13,15 +13,18 @@ Next Figure describes the methodological process employed for the development of
 
 <img src="dataset.png" alt="Attribute Distribution Datasets" width="400"/>
 
+------------------------------
 ## File Description
 
 | File       |Descripción			|
 |----------------|-------------------------------|
 |[Projeto_DS.ipynb](https://github.com/DiegoPaezA/Cancer-Classification/blob/main/Projeto_DS.ipynb)           |Breast Cancer Recurrence Classification - 2 Classes|
-|[Projeto_DS_Tune.ipynb](https://github.com/DiegoPaezA/Cancer-Classification/blob/main/Projeto_DS_Tune.ipynb)  |Breast Cancer Recurrence Classification - 2 Classes Gridsearch tunning|
+|[Projeto_DS_Tune.ipynb](https://github.com/DiegoPaezA/Cancer-Classification/blob/main/Projeto_DS_Tune.ipynb)  |Breast Cancer Recurrence Classification - 2 Classes Gridsearch Tunning|
 |[Projeto_DS_4clases.ipynb](https://github.com/DiegoPaezA/Cancer-Classification/blob/main/Projeto_DS_4clases.ipynb) |FreeRTOS Task notification Basic Test - 4 Classes | 
-|[Projeto_DS_4clases_Tune.ipynb](https://github.com/DiegoPaezA/Cancer-Classification/blob/main/Projeto_DS_4clases_Tune.ipynb) |FreeRTOS Task notification Basic Test - 4 Classes Gridsearch tunning | 
+|[Projeto_DS_4clases_Tune.ipynb](https://github.com/DiegoPaezA/Cancer-Classification/blob/main/Projeto_DS_4clases_Tune.ipynb) |FreeRTOS Task notification Basic Test - 4 Classes Gridsearch Tunning | 
 
+
+------
 ## References
 
 Detailed description of the project can be find on the on the Article: [Machine Learning Techniques Applied to the Classification of Breast Cancer Recurrence](https://is.gd/OOfN45)
