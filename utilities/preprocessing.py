@@ -64,6 +64,20 @@ def split_data(data, target, test_size=0.2):
     y = data[target]
     return train_test_split(X, y, test_size=test_size, random_state=42)
 
+def get_xy(data, target):
+    """
+    Split the data into X and y.
+    Args:
+        data (pandas.DataFrame): The dataset to split.
+        target (str): The name of the target column.
+    Returns:
+        tuple: The X and y.
+    """
+    
+    X = data.drop(target, axis=1)
+    y = data[target]
+    return X, y
+
 def mrmr_preprocess(data, target, n_selected_features=10):
     """
     Preprocess the data by selecting the best features using mRMR.
