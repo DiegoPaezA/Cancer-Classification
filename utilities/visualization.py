@@ -29,3 +29,15 @@ def plot_density_bin(data,target,fig_size=(20,20), num_cols=4, num_rows=5):
     plt.subplot(num_rows,num_cols,19).set_visible(False)
     plt.subplot(num_rows,num_cols,20).set_visible(False)
     plt.show()
+    
+def plot_confusion_matrix(data):
+    """
+    Plot the heatmap of the confusion matrix.
+    
+    Args:
+        data (ndarray of shape (n_classes, n_classes)): The confusion matrix.
+    """
+    ax = sns.heatmap(data, annot=True,xticklabels=['No Recurrence','Recurrence'],
+                 yticklabels=['No Recurrence','Recurrence'],cbar=False, cmap='Blues')
+    ax.set_xlabel("Prediction")
+    ax.set_ylabel("Actual")
