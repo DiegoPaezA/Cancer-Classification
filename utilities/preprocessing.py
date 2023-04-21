@@ -98,7 +98,6 @@ def mrmr_preprocess(data, target, n_selected_features=10):
     return new_data
     
     
-
 def gpp_preprocess(data, columns_to_drop, columns_to_standardize):
     """
     Preprocess the data by dropping columns, standardizing the data, and oversampling the data.
