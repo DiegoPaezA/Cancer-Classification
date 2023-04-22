@@ -2,7 +2,7 @@
 This file contains the functions to evaluate the models
 """
 import numpy as np
-np.random.seed(42)
+import pandas as pd
 
 from numpy import mean
 from numpy import std
@@ -18,8 +18,25 @@ from xgboost import XGBClassifier
 from utilities.preprocessing import split_data, get_xy
 from utilities.metrics import eval_performance
 
+np.random.seed(42)
 
-def train_model(model, data, target, test_size=0.2):
+
+def convert_to_df(results):
+  """
+  This function gets the results of the models and returns a dataframe.
+  
+  Args:
+    results (list): The list of dictionaris with the results of the models that 
+                    includes the kfold accuracy, std, and predictions of trained models.
+  Returns:
+    pandas.DataFrame: The dataframe of the results.
+  """
+  results_df = pd.DataFrame(results)
+  models_names = ["LR", "NB", "SVM", "KNN", "XGB"]
+  results_df.insert (0,"Models", models_names, True)
+  return results_df
+
+def evaluate_model(model, data, target, test_size=0.2):
   """
   This functions trains a model with kfold cross validation and also `model.fit`.
   
@@ -41,17 +58,25 @@ def train_model(model, data, target, test_size=0.2):
   model.fit(X_train, y_train)
   model_predic = model.predict(X_test)
 
-  # ['accuracy', 'average_precision', 'f1','recall', 'roc_auc']
+  metrics = eval_performance(y_test, model_predic)
+  
+  cv_results = {
+    "Accuracy (kfold)": accuracy_kfold,
+    "Std (kfold)": std_kfold
+  }
 
-  return [accuracy_kfold, std_kfold, model_predic]
+  result = {**cv_results, **metrics}
+  
+  return result
 
-def run_experiment(data, target, test_size=0.2):
+def run_experiment(data, target,Ename,test_size=0.2):
   """
   This function runs the experiment with the models.
   
   Args:
     data (pandas.DataFrame): The dataset to run the experiment on.
     target (str): The name of the target column.
+    Ename (str): The name of the experiment (E1, E2, E3, E4)
     test_size (float): The size of the test set.
   Returns:
     names (list): The list of the names of the models.
@@ -67,8 +92,10 @@ def run_experiment(data, target, test_size=0.2):
   models.append(('XGB', XGBClassifier()))
 
   results = []
-  models_names = ["LR", "NB", "SVM", "KNN", "XGB"]
-  for model in models:
-    results.append(train_model(model, data, target, test_size))
-    
-  return results
+  
+  for name, model in models:
+    #print(f"Running {name} model...")
+    results.append(evaluate_model(model, data, target, test_size))
+  results_df = convert_to_df(results)
+  return results_df
+
