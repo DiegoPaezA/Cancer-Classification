@@ -15,11 +15,15 @@ from sklearn.svm import SVC
 from sklearn.neighbors import KNeighborsClassifier
 from xgboost import XGBClassifier
 
-from utilities.preprocessing import split_data, get_xy
+from utilities.preprocessing import split_data, get_xy, oversample_data
 from utilities.metrics import eval_performance
+
+from collections import Counter
+
 
 np.random.seed(42)
 
+firts_time=True
 
 def convert_to_df(results):
   """
@@ -36,7 +40,7 @@ def convert_to_df(results):
   results_df.insert (0,"Models", models_names, True)
   return results_df
 
-def evaluate_model(model, data, target, test_size=0.2):
+def evaluate_model(model, data, target,Ename, test_size=0.2):
   """
   This functions trains a model with kfold cross validation and also `model.fit`.
   
@@ -44,8 +48,20 @@ def evaluate_model(model, data, target, test_size=0.2):
     model (sklearn model): The model to train.
     data (pandas.DataFrame): The dataset to train the model.
     target (str): The name of the target column.
+    Ename (str): The name of the experiment (E1, E2, E3, E4).
     test_size (float): The size of the test set.
   """
+  global firts_time
+  if Ename == "E4":
+    data = oversample_data(data, target)
+    if (firts_time):
+      print("Oversampling data...")
+      print("Class distribution in the oversampled data:")
+      counter = Counter(data["Class"])
+      print('%s : %d' % ('no Recurrence', counter[0]))
+      print('%s : %d' % ('Recurrence', counter[1]))
+      firts_time = False
+  
   X, y = get_xy(data, target)
   X_train, X_test, y_train, y_test = split_data(data, target, test_size)
   
@@ -95,7 +111,7 @@ def run_experiment(data, target,Ename,test_size=0.2):
   
   for name, model in models:
     #print(f"Running {name} model...")
-    results.append(evaluate_model(model, data, target, test_size))
+    results.append(evaluate_model(model,data,target,Ename, test_size))
   results_df = convert_to_df(results)
   return results_df
 
