@@ -1,10 +1,11 @@
 """
 This module contains the metrics used to evaluate the performance of the model.
 """
+import numpy as np
 from sklearn.metrics import confusion_matrix,classification_report,cohen_kappa_score, accuracy_score  
 from sklearn.metrics import roc_auc_score, f1_score,precision_score,recall_score  
 
-def eval_performance(ytest, ypredict):
+def eval_performance(ytest:np.ndarry, ypredict:np.ndarry):
   """
     Calculation of performance metrics:
     - Confusion Matrix:

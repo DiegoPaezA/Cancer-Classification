@@ -8,7 +8,6 @@ from numpy import mean
 from numpy import std
 from sklearn.model_selection import KFold
 from sklearn.model_selection import cross_val_score
-from sklearn.model_selection import cross_val_predict
 from sklearn.linear_model import LogisticRegression
 from sklearn.naive_bayes import GaussianNB
 from sklearn.svm import SVC
@@ -25,7 +24,7 @@ np.random.seed(42)
 
 firts_time=True
 
-def convert_to_df(results):
+def convert_to_df(results:dict):
   """
   This function gets the results of the models and returns a dataframe.
   
@@ -40,7 +39,7 @@ def convert_to_df(results):
   results_df.insert (0,"Models", models_names, True)
   return results_df
 
-def evaluate_model(model, data, target,Ename, test_size=0.2):
+def evaluate_model(model, data:pd.Dataframe, target:str,Ename:str, test_size=0.2):
   """
   This functions trains a model with kfold cross validation and also `model.fit`.
   
@@ -85,7 +84,7 @@ def evaluate_model(model, data, target,Ename, test_size=0.2):
   
   return result
 
-def run_experiment(data, target,Ename,test_size=0.2):
+def run_experiment(data:pd.Dataframe, target:str,Ename:str,test_size=0.2):
   """
   This function runs the experiment with the models.
   
