@@ -9,7 +9,7 @@ from imblearn.over_sampling import SMOTE
 from mrmr import mrmr_classif
 
 
-def drop_columns(data:pd.Dataframe, columns:list):
+def drop_columns(data, columns:list):
     """
     Drop the columns from the dataset.
     Args:
@@ -20,7 +20,7 @@ def drop_columns(data:pd.Dataframe, columns:list):
     """
     return data.drop(columns, axis=1)
 
-def standardize_data(data:pd.Dataframe, columns:list):
+def standardize_data(data, columns:list):
     """
     Standardize the data by subtracting the mean and dividing by the standard deviation.
     Args:
@@ -33,7 +33,7 @@ def standardize_data(data:pd.Dataframe, columns:list):
     data[columns] = scaler.fit_transform(data[columns])
     return data
 
-def oversample_data(data:pd.Dataframe, target:str):
+def oversample_data(data, target:str):
     """
     Oversample the data using SMOTE.
     Args:
@@ -49,7 +49,7 @@ def oversample_data(data:pd.Dataframe, target:str):
     X_res, y_res = sm.fit_resample(X, y)
     return pd.concat([X_res, y_res], axis=1)
 
-def split_data(data:pd.Dataframe, target:str, test_size=0.2):
+def split_data(data, target:str, test_size=0.2):
     """
     Split the data into training and testing sets.
     Args:
@@ -64,7 +64,7 @@ def split_data(data:pd.Dataframe, target:str, test_size=0.2):
     y = data[target]
     return train_test_split(X, y, test_size=test_size, random_state=42)
 
-def get_xy(data:pd.Dataframe, target:str):
+def get_xy(data, target:str):
     """
     Split the data into X and y.
     Args:
@@ -78,7 +78,7 @@ def get_xy(data:pd.Dataframe, target:str):
     y = data[target]
     return X, y
 
-def mrmr_preprocess(data:pd.Dataframe, target:str, n_selected_features=10):
+def mrmr_preprocess(data, target:str, n_selected_features=10):
     """
     Preprocess the data by selecting the best features using mRMR.
     
@@ -98,7 +98,7 @@ def mrmr_preprocess(data:pd.Dataframe, target:str, n_selected_features=10):
     return new_data
     
     
-def gpp_preprocess(data:pd.Dataframe, columns_to_drop:str, columns_to_standardize:str):
+def gpp_preprocess(data, columns_to_drop:str, columns_to_standardize:str):
     """
     Preprocess the data by dropping columns, standardizing the data, and oversampling the data.
     Args:

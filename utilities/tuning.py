@@ -31,7 +31,7 @@ def load_params(param_file):
         params = yaml.safe_load(f)
     return params
 
-def tune_hyperparameters(model,data:pd.Dataframe,target:str,Ename:str, parameters:dict):
+def tune_hyperparameters(model,data,target:str,Ename:str, parameters:dict):
     """
     Tune the hyperparameters of a model using GridSearchCV.
     
@@ -50,12 +50,11 @@ def tune_hyperparameters(model,data:pd.Dataframe,target:str,Ename:str, parameter
             firts_time = False
     
     X, y = get_xy(data, target)
-    X_train, X_test, y_train, y_test = split_data(data, target, test_size=0.2)
-    grid_search = GridSearchCV(model, parameters, cv=5, scoring='accuracy')
-    grid_search.fit(X_train, y_train)
+    grid_search = GridSearchCV(model, parameters, cv=10, scoring='accuracy')
+    grid_search.fit(X, y)
     return grid_search.best_params_
 
-def tune_experiment(data:pd.Dataframe,target:str,Ename:str,parameters:dict):
+def tune_experiment(data,target:str,Ename:str,parameters:dict):
     """
     Tune the hyperparameters of a model using GridSearchCV and return the 
     accuracy score on the test set.
@@ -68,16 +67,16 @@ def tune_experiment(data:pd.Dataframe,target:str,Ename:str,parameters:dict):
     Returns:
         tuned_params (dict): the tuned parameters
     """
-    
+    keys = list(parameters.keys())
     models = []
-    models.append(('LR', LogisticRegression()))
-    models.append(('NB', GaussianNB()))
-    models.append(('SVM', SVC()))
-    models.append(('KNN', KNeighborsClassifier()))
-    models.append(('XGB', XGBClassifier()))
+    models.append(LogisticRegression())
+    models.append(GaussianNB())
+    models.append(SVC())
+    models.append(KNeighborsClassifier())
+    models.append(XGBClassifier())
     results = []
-    
-    for name, model in models:
-        results.append(tune_hyperparameters(model,data, target, Ename, parameters))
-    
-    return 1
+
+    for idx, model in enumerate(models):
+        results.append(tune_hyperparameters(model,data,target,Ename,parameters[keys[idx]]))
+
+    return results
