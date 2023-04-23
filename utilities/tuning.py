@@ -41,14 +41,14 @@ def tune_hyperparameters(model,data,target:str,Ename:str, parameters:dict):
     global firts_time
     if Ename == "E4":
         data = oversample_data(data, target)
-        if (firts_time):
-            print("Oversampling data...")
-            print("Class distribution in the oversampled data:")
-            counter = Counter(data["Class"])
-            print('%s : %d' % ('no Recurrence', counter[0]))
-            print('%s : %d' % ('Recurrence', counter[1]))
-            firts_time = False
-    
+        # if (firts_time):
+        #     print("Oversampling done...")
+        #     print("Class distribution in the oversampled data:")
+        #     counter = Counter(data["Class"])
+        #     print('%s : %d' % ('no Recurrence', counter[0]))
+        #     print('%s : %d' % ('Recurrence', counter[1]))
+        #     firts_time = False
+            
     X, y = get_xy(data, target)
     grid_search = GridSearchCV(model, parameters, cv=10, scoring='accuracy')
     grid_search.fit(X, y)
@@ -67,16 +67,22 @@ def tune_experiment(data,target:str,Ename:str,parameters:dict):
     Returns:
         tuned_params (dict): the tuned parameters
     """
+    # update nayive bayes parameters
+    parameters["naive_bayes"]["var_smoothing"] = np.logspace(0,-9, num=1000)
     keys = list(parameters.keys())
     models = []
-    models.append(LogisticRegression())
-    models.append(GaussianNB())
-    models.append(SVC())
-    models.append(KNeighborsClassifier())
-    models.append(XGBClassifier())
+    models.append(('LR', LogisticRegression()))
+    models.append(('NB', GaussianNB()))
+    models.append(('SVM', SVC()))
+    models.append(('KNN', KNeighborsClassifier()))
+    models.append(('XGB', XGBClassifier()))
     results = []
 
     for idx, model in enumerate(models):
+        name = model[0]
+        model = model[1]
+        print(f"Tuning hyperparameters for {name}...")
         results.append(tune_hyperparameters(model,data,target,Ename,parameters[keys[idx]]))
-
+        
+        
     return results
