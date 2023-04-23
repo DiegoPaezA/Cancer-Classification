@@ -39,7 +39,7 @@ def convert_to_df(results:dict):
   results_df.insert (0,"Models", models_names, True)
   return results_df
 
-def evaluate_model(model, data, target:str,Ename:str, test_size=0.2):
+def evaluate_model(model, data:pd.DataFrame, target:str,Ename:str, test_size=0.2):
   """
   This functions trains a model with kfold cross validation and also `model.fit`.
   
@@ -84,7 +84,7 @@ def evaluate_model(model, data, target:str,Ename:str, test_size=0.2):
   
   return result
 
-def run_experiment(data, target:str,Ename:str,test_size=0.2):
+def run_experiment(data:pd.DataFrame, target:str,Ename:str,test_size=0.2):
   """
   This function runs the experiment with the models.
   

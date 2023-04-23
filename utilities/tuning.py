@@ -3,6 +3,7 @@ This module contains functions for tuning the hyperparameters of a model.
 """
 import numpy as np
 import pandas as pd
+import json
 import yaml
 from sklearn.model_selection import GridSearchCV
 from utilities.preprocessing import split_data, get_xy, oversample_data
@@ -13,12 +14,23 @@ from sklearn.svm import SVC
 from sklearn.neighbors import KNeighborsClassifier
 from xgboost import XGBClassifier
 
-from collections import Counter
 
 firts_time = True
 
+def save_tuned_params(params:dict, param_file:str):
+    """
+    Save the tuned parameters to a json file.
+    
+    Args:
+        params (dict): dictionary with the parameters
+        param_file (str): path to the YAML file
+    """
+    with open(param_file, 'w') as f:
+        json.dump(params, f, indent=4)
+    f.close()
+    print("Tuned parameters saved to ...")
 
-def load_params(param_file):
+def load_params(param_file:yaml):
     """
     Load the parameters from a YAML file and return a dict with the parameters.
     
@@ -31,7 +43,7 @@ def load_params(param_file):
         params = yaml.safe_load(f)
     return params
 
-def tune_hyperparameters(model,data,target:str,Ename:str, parameters:dict):
+def tune_hyperparameters(model,data:pd.DataFrame,target:str,Ename:str, parameters:dict):
     """
     Tune the hyperparameters of a model using GridSearchCV.
     
@@ -50,11 +62,11 @@ def tune_hyperparameters(model,data,target:str,Ename:str, parameters:dict):
         #     firts_time = False
             
     X, y = get_xy(data, target)
-    grid_search = GridSearchCV(model, parameters, cv=10, scoring='accuracy')
+    grid_search = GridSearchCV(model, parameters, cv=10, scoring="roc_auc")
     grid_search.fit(X, y)
     return grid_search.best_params_
 
-def tune_experiment(data,target:str,Ename:str,parameters:dict):
+def tune_experiment(data:pd.DataFrame,target:str,Ename:str,parameters:dict):
     """
     Tune the hyperparameters of a model using GridSearchCV and return the 
     accuracy score on the test set.
@@ -77,12 +89,20 @@ def tune_experiment(data,target:str,Ename:str,parameters:dict):
     models.append(('KNN', KNeighborsClassifier()))
     models.append(('XGB', XGBClassifier()))
     results = []
+    
+    dict_best_params = {
+        "log_reg":{},
+        "naive_bayes":{},
+        "svm":{},
+        "knn":{},
+        "xgb":{},
+    }
 
     for idx, model in enumerate(models):
         name = model[0]
         model = model[1]
         print(f"Tuning hyperparameters for {name}...")
-        results.append(tune_hyperparameters(model,data,target,Ename,parameters[keys[idx]]))
+        best_param = (tune_hyperparameters(model,data,target,Ename,parameters[keys[idx]]))
+        dict_best_params[keys[idx]] = best_param
         
-        
-    return results
+    return dict_best_params
