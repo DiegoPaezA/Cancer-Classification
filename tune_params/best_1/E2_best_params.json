@@ -1,0 +1,32 @@
+{
+    "log_reg": {
+        "C": 1,
+        "max_iter": 100,
+        "penalty": "l1",
+        "solver": "liblinear"
+    },
+    "naive_bayes": {
+        "var_smoothing": 0.002024446509976804
+    },
+    "svm": {
+        "C": 1,
+        "coef0": 0.0,
+        "gamma": "scale",
+        "kernel": "rbf"
+    },
+    "knn": {
+        "algorithm": "auto",
+        "leaf_size": 1,
+        "n_neighbors": 20,
+        "p": 1,
+        "weights": "distance"
+    },
+    "xgb": {
+        "colsample_bytree": 0.6,
+        "gamma": 0.2,
+        "learning_rate": 0.01,
+        "max_depth": 10,
+        "reg_lambda": 1.5,
+        "subsample": 1.0
+    }
+}
