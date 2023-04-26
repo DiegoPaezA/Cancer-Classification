@@ -84,7 +84,7 @@ def evaluate_model(model, data:pd.DataFrame, target:str,Ename:str, test_size=0.2
   
   return result
 
-def run_experiment(data:pd.DataFrame,target:str,Ename:str,test_size=0.2):
+def run_experiment(data:pd.DataFrame,target:str,Ename:str,params:dict,test_size=0.2):
   """
   This function runs the experiment with the models.
   
@@ -99,12 +99,13 @@ def run_experiment(data:pd.DataFrame,target:str,Ename:str,test_size=0.2):
                     includes the kfold accuracy, std, and predictions of trained models.
     
   """
+  
   models = []
-  models.append(('LR', LogisticRegression()))
-  models.append(('NB', GaussianNB()))
-  models.append(('SVM', SVC()))
-  models.append(('KNN', KNeighborsClassifier()))
-  models.append(('XGB', XGBClassifier()))
+  models.append(('LR', LogisticRegression(**params["log_reg"])))
+  models.append(('NB', GaussianNB(**params["naive_bayes"])))
+  models.append(('SVM', SVC(**params["svm"])))
+  models.append(('KNN', KNeighborsClassifier(**params["knn"])))
+  models.append(('XGB', XGBClassifier(**params["xgb"])))
 
   results = []
   
