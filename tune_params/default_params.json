@@ -1,0 +1,9 @@
+{
+    "log_reg": {},
+    "naive_bayes": {
+        "var_smoothing": 1e-9
+    },
+    "svm": {},
+    "knn": {},
+    "xgb": {}
+}
