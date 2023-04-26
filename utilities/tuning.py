@@ -4,7 +4,7 @@ This module contains functions for tuning the hyperparameters of a model.
 import numpy as np
 import pandas as pd
 import json
-import yaml
+
 from sklearn.model_selection import GridSearchCV
 from utilities.preprocessing import split_data, get_xy, oversample_data
 
@@ -30,7 +30,7 @@ def save_tuned_params(params:dict, param_file:str):
     f.close()
     print("Tuned parameters saved to ...")
 
-def load_params(param_file:yaml):
+def load_params(param_file:json):
     """
     Load the parameters from a YAML file and return a dict with the parameters.
     
@@ -40,7 +40,7 @@ def load_params(param_file:yaml):
         params (dict): dictionary with the parameters
     """
     with open(param_file, 'r') as f:
-        params = yaml.safe_load(f)
+        params = json.load(f)
     return params
 
 def tune_hyperparameters(model,data:pd.DataFrame,target:str,Ename:str, parameters:dict):
