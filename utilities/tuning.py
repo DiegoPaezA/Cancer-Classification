@@ -32,10 +32,10 @@ def save_tuned_params(params:dict, param_file:str):
 
 def load_params(param_file:json):
     """
-    Load the parameters from a YAML file and return a dict with the parameters.
+    Load the parameters from a json file and return a dict with the parameters.
     
     Args:
-        param_file (str): path to the YAML file
+        param_file (str): path to the json file
     Returns: 
         params (dict): dictionary with the parameters
     """
@@ -66,7 +66,7 @@ def tune_hyperparameters(model,data:pd.DataFrame,target:str,Ename:str, parameter
     grid_search.fit(X, y)
     return grid_search.best_params_
 
-def tune_experiment(data:pd.DataFrame,target:str,Ename:str,parameters:dict):
+def tune_experiment(data:pd.DataFrame,target:str,Ename:str,tuneparams:dict, defaultparams:dict):
     """
     Tune the hyperparameters of a model using GridSearchCV and return the 
     accuracy score on the test set.
@@ -75,19 +75,19 @@ def tune_experiment(data:pd.DataFrame,target:str,Ename:str,parameters:dict):
         data (pandas.DataFrame): the data
         target (str): the name of the target column
         Ename (str): The name of the experiment (E1, E2, E3, E4)
-        parameters (dict): the parameters to tune
+        tuneparams (dict): the parameters to tune
     Returns:
         tuned_params (dict): the tuned parameters
     """
     # update nayive bayes parameters
-    parameters["naive_bayes"]["var_smoothing"] = np.logspace(0,-9, num=1000)
-    keys = list(parameters.keys())
+    tuneparams["naive_bayes"]["var_smoothing"] = np.logspace(0,-9, num=1000)
+    keys = list(tuneparams.keys())
     models = []
-    models.append(('LR', LogisticRegression()))
-    models.append(('NB', GaussianNB()))
-    models.append(('SVM', SVC()))
-    models.append(('KNN', KNeighborsClassifier()))
-    models.append(('XGB', XGBClassifier()))
+    models.append(('LR', LogisticRegression(**defaultparams["log_reg"])))
+    models.append(('NB', GaussianNB(**defaultparams["naive_bayes"])))
+    models.append(('SVM', SVC(**defaultparams["svm"])))
+    models.append(('KNN', KNeighborsClassifier(**defaultparams["knn"])))
+    models.append(('XGB', XGBClassifier(**defaultparams["xgb"])))
     results = []
     
     dict_best_params = {
@@ -102,7 +102,7 @@ def tune_experiment(data:pd.DataFrame,target:str,Ename:str,parameters:dict):
         name = model[0]
         model = model[1]
         print(f"Tuning hyperparameters for {name}...")
-        best_param = (tune_hyperparameters(model,data,target,Ename,parameters[keys[idx]]))
+        best_param = (tune_hyperparameters(model,data,target,Ename,tuneparams[keys[idx]]))
         dict_best_params[keys[idx]] = best_param
         
     return dict_best_params

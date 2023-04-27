@@ -5,7 +5,7 @@ This module contains the metrics used to evaluate the performance of the model.
 from sklearn.metrics import confusion_matrix,classification_report,cohen_kappa_score, accuracy_score  
 from sklearn.metrics import roc_auc_score, f1_score,precision_score,recall_score  
 import numpy as np
-def eval_performance(ytest: np.array, ypredict: np.array):
+def eval_performance(ytest: np.array, ypredict: np.array, yproba: np.array):
   """
     Calculation of performance metrics:
     - Confusion Matrix:
@@ -33,8 +33,12 @@ def eval_performance(ytest: np.array, ypredict: np.array):
   
 
   cohenkappa= round(cohen_kappa_score(ytest, ypredict),3)
-  auroc_score = round(roc_auc_score(ytest, ypredict),3)
+  
+  multi_class = "ovr" if len(np.unique(ytest)) > 2 else "raise"
+  ydata = yproba if len(np.unique(ytest)) > 2 else ypredict
 
+  auroc_score = round(roc_auc_score(ytest, y_score = ydata, multi_class=multi_class),3)
+  
 
   result = {
     "Accuracy Score": accuracyscore,
@@ -42,6 +46,6 @@ def eval_performance(ytest: np.array, ypredict: np.array):
     "F1 Score": f1score,
     "Recall Score": recallscore,
     "Cohen Kappa Score": cohenkappa,
-    "ROC AUC Score": auroc_score,
+    "ROC AUC Score": auroc_score
   }
   return result

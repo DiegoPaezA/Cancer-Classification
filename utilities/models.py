@@ -56,9 +56,6 @@ def evaluate_model(model, data:pd.DataFrame, target:str,Ename:str, test_size=0.2
     if (firts_time):
       print("Oversampling data...")
       print("Class distribution in the oversampled data:")
-      counter = Counter(data["Class"])
-      print('%s : %d' % ('no Recurrence', counter[0]))
-      print('%s : %d' % ('Recurrence', counter[1]))
       firts_time = False
   
   X, y = get_xy(data, target)
@@ -66,14 +63,15 @@ def evaluate_model(model, data:pd.DataFrame, target:str,Ename:str, test_size=0.2
   
   cv = KFold(n_splits=10, random_state=42, shuffle=True)
   scores_origin = cross_val_score(model, X, y, scoring='accuracy', cv=cv, n_jobs=-1)
-  
+    
   accuracy_kfold = round(mean(scores_origin),3)
   std_kfold = round(std(scores_origin),3)
   
   model.fit(X_train, y_train)
   model_predic = model.predict(X_test)
+  model_prob = model.predict_proba(X_test)
 
-  metrics = eval_performance(y_test, model_predic)
+  metrics = eval_performance(y_test, model_predic,model_prob)
   
   cv_results = {
     "Accuracy (kfold)": accuracy_kfold,

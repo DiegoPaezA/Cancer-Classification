@@ -24,7 +24,7 @@ def plot_density_bin(data,target,fig_size=(20,20), num_cols=4, num_rows=5):
         ax.yaxis.set_ticklabels([])
         fig = sns.kdeplot(data.loc[data[target] == 0][col], shade=True, color="r", linestyle='--')
         fig = sns.kdeplot(data.loc[data[target] == 1][col], shade=True, color="b")
-        ax.legend(labels=['No Rec','Rec']) # No Recurrence; # Recurrence
+        ax.legend(labels=['Rec','No Rec']) # No Recurrence; # Recurrence
 
     plt.subplot(num_rows,num_cols,19).set_visible(False)
     plt.subplot(num_rows,num_cols,20).set_visible(False)

@@ -4,6 +4,7 @@ This module contains functions for preprocessing of the data.
 import pandas as pd
 import numpy as np
 from sklearn.preprocessing import StandardScaler
+from sklearn.cluster import KMeans
 from sklearn.model_selection import train_test_split
 from imblearn.over_sampling import SMOTE
 from mrmr import mrmr_classif
@@ -19,6 +20,16 @@ def drop_columns(data:pd.DataFrame, columns:list):
         pandas.DataFrame: The dataset with the columns dropped.
     """
     return data.drop(columns, axis=1)
+def drop_rows(data:pd.DataFrame, rows:list):
+    """
+    Drop the rows from the dataset.
+    Args:
+        data (pandas.DataFrame): The dataset to drop the rows from.
+        rows (list): The list of rows to drop.
+    Returns:
+        pandas.DataFrame: The dataset with the rows dropped.
+    """
+    return data.drop(rows, axis=0)
 
 def standardize_data(data:pd.DataFrame, columns:list):
     """
@@ -78,6 +89,25 @@ def get_xy(data:pd.DataFrame, target:str):
     y = data[target]
     return X, y
 
+def kmeans_preprocess(data:pd.DataFrame, target:str, n_clusters=2):
+    """
+    This function preprocesses the data by clustering the target column using KMeans.
+    
+    Args:
+        data (pandas.DataFrame): The dataset to preprocess.
+        target (str): The name of the target column.
+        n_clusters (int): The number of clusters to use.
+    Returns:
+        pandas.DataFrame: The preprocessed dataset.
+    """
+    target_data = data[target].values.reshape(-1, 1)
+    kmeans = KMeans(n_clusters=n_clusters, random_state=42).fit(target_data)
+    target_kmeans = kmeans.predict(target_data)
+    y = pd.DataFrame(target_kmeans, columns=[target])
+    X = data.drop(target, axis=1)
+    data = pd.concat([X, y], axis=1)
+    return data
+
 def mrmr_preprocess(data:pd.DataFrame, target:str, n_selected_features=10):
     """
     Preprocess the data by selecting the best features using mRMR.
@@ -110,6 +140,8 @@ def gpp_preprocess(data:pd.DataFrame, columns_to_drop:str, columns_to_standardiz
         pandas.DataFrame: The preprocessed dataset.
     """
     
+    idx_Men = np.where(data.Sex == 1)
+    data = drop_rows(data, idx_Men[0])
     data = drop_columns(data, columns_to_drop)
     data = standardize_data(data, columns_to_standardize)
     return data
