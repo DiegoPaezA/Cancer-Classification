@@ -1,0 +1,14 @@
+{
+    "log_reg": {
+        "random_state":42
+    },
+    "naive_bayes": {
+        "var_smoothing": 1e-9
+    },
+    "svm": {
+        "probability": true,
+        "random_state": 42
+    },
+    "knn": {},
+    "xgb": {}
+}
