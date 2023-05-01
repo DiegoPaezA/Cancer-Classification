@@ -10,9 +10,11 @@
 - [References](#references)
 
 ## Abstract
+
 <p align="justify">Breast cancer affected 2.3 million women in 2020, resulting in 685,000 deaths worldwide. Death from breast cancer is mainly associated with metastasis and relapse. This work aims to analyze data corresponding to patients diagnosed with breast cancer, apply data mining to predict disease recurrence, and compare the performance of machine learning techniques in breast cancer relapse classification.</p>
 
 ## Methodology
+
 <p align="justify">This project proposes three configurations using different data preprocessing techniques to analyze and compare the performance of Machine Learning (ML) models applied to recurrence classification in breast cancer.
 Next Figure describes the methodological process employed for the development of the project. First, there is a General Pre-Processing block (GPP) of the data applied to the dataset. Then, configurations MC-1, MC-2, MC-3, and MC-4 defined for the evaluation of the models follow a line in which different operations are performed on the data before the training models.
 </p>
@@ -43,3 +45,4 @@ Next Figure describes the methodological process employed for the development of
 ## References
 
 Detailed description of the project can be find on the on the Article: [Machine Learning Techniques Applied to the Classification of Breast Cancer Recurrence](https://is.gd/OOfN45)
+
