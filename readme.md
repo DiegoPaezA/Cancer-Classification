@@ -9,11 +9,8 @@
 - [File Description](#file-description)
 - [References](#references)
 
-
 ## Abstract
 <p align="justify">Breast cancer affected 2.3 million women in 2020, resulting in 685,000 deaths worldwide. Death from breast cancer is mainly associated with metastasis and relapse. This work aims to analyze data corresponding to patients diagnosed with breast cancer, apply data mining to predict disease recurrence, and compare the performance of machine learning techniques in breast cancer relapse classification.</p>
-
----
 
 ## Methodology
 <p align="justify">This project proposes three configurations using different data preprocessing techniques to analyze and compare the performance of Machine Learning (ML) models applied to recurrence classification in breast cancer.
@@ -24,8 +21,6 @@ Next Figure describes the methodological process employed for the development of
 <img src="images/Method description.jpg" alt="Methodology" width="300" />
 </p>
 
----
-
 ## Dataset Description
 
 <p align="justify">In this study, two versions of the same dataset were used; the difference is the number of target classes (2 and 4) each had. This dataset contains 344 instances with 19 attributes, distributed in four categorical with integer coding, eight categorical with binary coding, and seven continuous. The target variable is a recurrence, and for versions 1 and 2 of the dataset, it is divided into (no recurrence, with recurrence) and (no recurrence, early recurrence, medium recurrence, late recurrence). Figure 2 shows the name of each attribute and its distribution.</p>
@@ -34,12 +29,9 @@ Next Figure describes the methodological process employed for the development of
 <img src="images/dataset.png" alt="Attribute Distribution Datasets" width="400"/>
 </p>
 
----
-
 ## Results
 
 
----
 
 ## File Description
 
@@ -47,7 +39,6 @@ Next Figure describes the methodological process employed for the development of
 |----------------|-------------------------------|
 |[Projeto_Cancer.ipynb](https://github.com/DiegoPaezA/Cancer-Classification/blob/main/Projeto_Cancer.ipynb)           |Breast Cancer Recurrence Classification + 2 Classes Gridsearch Tunning|
 |[Projeto_Cancer_4C.ipynb](https://github.com/DiegoPaezA/Cancer-Classification/blob/main/Projeto_Cancer_4C.ipynb)  |Breast Cancer Recurrence Classification + 4 Classes Gridsearch Tunning|
----
 
 ## References
 
