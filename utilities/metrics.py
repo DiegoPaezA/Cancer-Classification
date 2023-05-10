@@ -26,26 +26,26 @@ def eval_performance(ytest: np.array, ypredict: np.array, yproba: np.array):
   matrixconfu  = confusion_matrix(ytest, ypredict)
   matrixreport = classification_report(ytest, ypredict)
   
-  accuracyscore = round(accuracy_score(ytest, ypredict),3)
-  f1score = round(f1_score(ytest, ypredict, average='weighted'),3)
-  precisionscore = round(precision_score(ytest, ypredict, average='weighted'),3)
-  recallscore = round(recall_score(ytest, ypredict, average='weighted'),3)
+  accuracyscore = round(accuracy_score(ytest, ypredict),5)
+  f1score = round(f1_score(ytest, ypredict, average='weighted'),5)
+  precisionscore = round(precision_score(ytest, ypredict, average='weighted'),5)
+  recallscore = round(recall_score(ytest, ypredict, average='weighted'),5)
   
 
-  cohenkappa= round(cohen_kappa_score(ytest, ypredict),3)
+  cohenkappa= round(cohen_kappa_score(ytest, ypredict),5)
   
   multi_class = "ovr" if len(np.unique(ytest)) > 2 else "raise"
   ydata = yproba if len(np.unique(ytest)) > 2 else ypredict
 
-  auroc_score = round(roc_auc_score(ytest, y_score = ydata, multi_class=multi_class),3)
+  auroc_score = round(roc_auc_score(ytest, y_score = ydata, multi_class=multi_class),5)
   
 
   result = {
     "Accuracy Score": accuracyscore,
     "Precision Score": precisionscore,
-    "F1 Score": f1score,
     "Recall Score": recallscore,
-    "Cohen Kappa Score": cohenkappa,
-    "ROC AUC Score": auroc_score
+    "F1 Score": f1score
+    #"Cohen Kappa Score": cohenkappa,
+    #"ROC AUC Score": auroc_score
   }
   return result
