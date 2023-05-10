@@ -3,6 +3,7 @@ This file contains the functions to evaluate the models
 """
 import numpy as np
 import pandas as pd
+import random
 
 from numpy import mean
 from numpy import std
@@ -20,7 +21,7 @@ from utilities.metrics import eval_performance
 from collections import Counter
 
 
-np.random.seed(42)
+#np.random.seed(42)
 
 firts_time=True
 
@@ -64,12 +65,16 @@ def evaluate_model(model, data:pd.DataFrame, target:str,Ename:str, test_size=0.2
   cv = KFold(n_splits=10, random_state=42, shuffle=True)
   scores_origin = cross_val_score(model, X, y, scoring='accuracy', cv=cv, n_jobs=-1)
     
-  accuracy_kfold = round(mean(scores_origin),3)
-  std_kfold = round(std(scores_origin),3)
+  accuracy_kfold = round(mean(scores_origin),5)
+  std_kfold = round(std(scores_origin),5)
   
   model.fit(X_train, y_train)
   model_predic = model.predict(X_test)
-  model_prob = model.predict_proba(X_test)
+  
+  if len(np.unique(y_test))>2:
+    model_prob = model.predict_proba(X_test)
+  else:
+    model_prob = []  
 
   metrics = eval_performance(y_test, model_predic,model_prob)
   
@@ -82,7 +87,7 @@ def evaluate_model(model, data:pd.DataFrame, target:str,Ename:str, test_size=0.2
   
   return result
 
-def run_experiment(data:pd.DataFrame,target:str,Ename:str,params:dict,test_size=0.2):
+def run_experiment(data:pd.DataFrame,target:str,Ename:str,params:dict,num_exp:int=1,test_size=0.2)-> pd.DataFrame:
   """
   This function runs the experiment with the models.
   
@@ -90,14 +95,15 @@ def run_experiment(data:pd.DataFrame,target:str,Ename:str,params:dict,test_size=
     data (pandas.DataFrame): The dataset to run the experiment on.
     target (str): The name of the target column.
     Ename (str): The name of the experiment (E1, E2, E3, E4)
+    num_exp (int): The number of experiments to run.
     test_size (float): The size of the test set.
   Returns:
-    names (list): The list of the names of the models.
-    results (list): The list of the results of the models that 
+    
+    results (pd.Dataframe): The list of the results of the models that 
                     includes the kfold accuracy, std, and predictions of trained models.
     
   """
-  
+  #Tuple[Dict[str, List[float]], torch.Tensor]
   models = []
   models.append(('LR', LogisticRegression(**params["log_reg"])))
   models.append(('NB', GaussianNB(**params["naive_bayes"])))
@@ -106,10 +112,14 @@ def run_experiment(data:pd.DataFrame,target:str,Ename:str,params:dict,test_size=
   models.append(('XGB', XGBClassifier(**params["xgb"])))
 
   results = []
-  
-  for name, model in models:
-    #print(f"Running {name} model...")
-    results.append(evaluate_model(model,data,target,Ename, test_size))
-  results_df = convert_to_df(results)
-  return results_df
+  all_exp_results = []
+  for num in range(num_exp):
+    print(f"Running experiment {num+1}...")
+    for name, model in models:
+      #print(f"Running {name} model...")
+      results.append(evaluate_model(model,data,target,Ename, test_size))
+    all_exp_results.append(results)
+      
+  #results_df = convert_to_df(results)
+  return all_exp_results
 
