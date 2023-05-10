@@ -20,7 +20,7 @@ Next Figure describes the methodological process employed for the development of
 </p>
 
 <p align="center">
-<img src="images/Method description.jpg" alt="Methodology" width="300" />
+<img src="images/Metodo_v2.jpg" alt="Methodology" width="300" />
 </p>
 
 ## Dataset Description
