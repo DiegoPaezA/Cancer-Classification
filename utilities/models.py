@@ -46,10 +46,16 @@ def evaluate_model(model, data:pd.DataFrame, target:str,Ename:str, test_size=0.2
   
   Args:
     model (sklearn model): The model to train.
+    
     data (pandas.DataFrame): The dataset to train the model.
+    
     target (str): The name of the target column.
+    
     Ename (str): The name of the experiment (E1, E2, E3, E4).
+    
     test_size (float): The size of the test set.
+  Returns:
+    dict: The dictionary with the results of the model.
   """
   global firts_time
   if Ename == "E4":
@@ -62,11 +68,11 @@ def evaluate_model(model, data:pd.DataFrame, target:str,Ename:str, test_size=0.2
   X, y = get_xy(data, target)
   X_train, X_test, y_train, y_test = split_data(data, target, test_size)
   
-  cv = KFold(n_splits=10, random_state=42, shuffle=True)
+  cv = KFold(n_splits=10, shuffle=True)
   scores_origin = cross_val_score(model, X, y, scoring='accuracy', cv=cv, n_jobs=-1)
     
-  accuracy_kfold = round(mean(scores_origin),5)
-  std_kfold = round(std(scores_origin),5)
+  accuracy_kfold = round(mean(scores_origin),4)
+  std_kfold = round(std(scores_origin),4)
   
   model.fit(X_train, y_train)
   model_predic = model.predict(X_test)
@@ -93,9 +99,13 @@ def run_experiment(data:pd.DataFrame,target:str,Ename:str,params:dict,num_exp:in
   
   Args:
     data (pandas.DataFrame): The dataset to run the experiment on.
+    
     target (str): The name of the target column.
+    
     Ename (str): The name of the experiment (E1, E2, E3, E4)
+    
     num_exp (int): The number of experiments to run.
+    
     test_size (float): The size of the test set.
   Returns:
     
@@ -119,7 +129,7 @@ def run_experiment(data:pd.DataFrame,target:str,Ename:str,params:dict,num_exp:in
       #print(f"Running {name} model...")
       results.append(evaluate_model(model,data,target,Ename, test_size))
     all_exp_results.append(results)
-      
+    results = []  
   #results_df = convert_to_df(results)
   return all_exp_results
 
