@@ -40,20 +40,22 @@ def convert_to_df(results:dict):
   results_df.insert (0,"Models", models_names, True)
   return results_df
 
+
 def evaluate_model(model, data:pd.DataFrame, target:str,Ename:str, test_size=0.2):
   """
   This functions trains a model with kfold cross validation and also `model.fit`.
   
   Args:
-    model (sklearn model): The model to train.
-    
-    data (pandas.DataFrame): The dataset to train the model.
-    
-    target (str): The name of the target column.
-    
-    Ename (str): The name of the experiment (E1, E2, E3, E4).
-    
-    test_size (float): The size of the test set.
+    model : sklearn model
+      The model to train.
+    data : pandas.DataFrame
+      The dataset to train the model.
+    target : str
+      The name of the target column.
+    Ename : str
+      The name of the experiment (E1, E2, E3, E4).
+    test_size : float 
+      The size of the test set.
   Returns:
     dict: The dictionary with the results of the model.
   """
