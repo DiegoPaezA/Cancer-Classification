@@ -73,7 +73,7 @@ def split_data(data:pd.DataFrame, target:str, test_size=0.2):
     
     X = data.drop(target, axis=1)
     y = data[target]
-    return train_test_split(X, y, test_size=test_size, random_state=42)
+    return train_test_split(X, y, test_size=test_size)
 
 def get_xy(data:pd.DataFrame, target:str):
     """
@@ -94,14 +94,17 @@ def kmeans_preprocess(data:pd.DataFrame, target:str, n_clusters=2):
     This function preprocesses the data by clustering the target column using KMeans.
     
     Args:
-        data (pandas.DataFrame): The dataset to preprocess.
-        target (str): The name of the target column.
-        n_clusters (int): The number of clusters to use.
+        data : pandas.DataFrame
+            The dataset to preprocess
+        target : str 
+            The name of the target column
+        n_clusters : int 
+            The number of clusters to use for KMeans
     Returns:
         pandas.DataFrame: The preprocessed dataset.
     """
     target_data = data[target].values.reshape(-1, 1)
-    kmeans = KMeans(n_clusters=n_clusters, random_state=42).fit(target_data)
+    kmeans = KMeans(n_clusters=n_clusters, init='k-means++', n_init="auto").fit(target_data)
     target_kmeans = kmeans.predict(target_data)
     y = pd.DataFrame(target_kmeans, columns=[target])
     X = data.drop(target, axis=1)
