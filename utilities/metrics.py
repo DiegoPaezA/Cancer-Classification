@@ -23,21 +23,33 @@ def eval_performance(ytest: np.array, ypredict: np.array, yproba: np.array):
         precisionscore,f1score,recallscore,cohenkappa,auroc_score
     """
 
-  matrixconfu  = confusion_matrix(ytest, ypredict)
-  matrixreport = classification_report(ytest, ypredict)
+  average_state = None if len(np.unique(ytest)) > 2 else "binary"
   
-  accuracyscore = round(accuracy_score(ytest, ypredict),5)
-  f1score = round(f1_score(ytest, ypredict, average='weighted'),5)
-  precisionscore = round(precision_score(ytest, ypredict, average='weighted'),5)
-  recallscore = round(recall_score(ytest, ypredict, average='weighted'),5)
+  #matrixconfu  = confusion_matrix(ytest, ypredict)
+  #matrixreport = classification_report(ytest, ypredict)
   
+  accuracyscore = round(accuracy_score(ytest, ypredict),4)
+  f1score = f1_score(ytest, ypredict, average=average_state)
+  precisionscore = precision_score(ytest, ypredict, average=average_state)
+  recallscore = recall_score(ytest, ypredict, average=average_state)
+  
+  # if multi-class classification, return only the last class metrics
+  if len(np.unique(ytest)) > 2:
+    f1score = f1score[-1]
+    precisionscore = precisionscore[-1]
+    recallscore = recallscore[-1]
+    
+  # round to 4 decimals the metrics
+  f1score = round(f1score,4)
+  precisionscore = round(precisionscore,4)
+  recallscore = round(recallscore,4)
+    
+    
+  #cohenkappa= round(cohen_kappa_score(ytest, ypredict),4)
 
-  cohenkappa= round(cohen_kappa_score(ytest, ypredict),5)
-  
-  multi_class = "ovr" if len(np.unique(ytest)) > 2 else "raise"
-  ydata = yproba if len(np.unique(ytest)) > 2 else ypredict
-
-  auroc_score = round(roc_auc_score(ytest, y_score = ydata, multi_class=multi_class),5)
+  #multi_class = "ovr" if len(np.unique(ytest)) > 2 else "raise"
+  #ydata = yproba if len(np.unique(ytest)) > 2 else ypredict
+  #auroc_score = round(roc_auc_score(ytest, y_score = ydata, multi_class=multi_class),4)
   
 
   result = {
