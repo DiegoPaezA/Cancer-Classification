@@ -62,8 +62,10 @@ def tune_hyperparameters(model,data:pd.DataFrame,target:str,Ename:str, parameter
         #     firts_time = False
             
     X, y = get_xy(data, target)
-    grid_search = GridSearchCV(model, parameters, cv=10, scoring="roc_auc")
-    grid_search.fit(X, y)
+    X_train, X_test, y_train, y_test = split_data(X, y)
+    grid_search = GridSearchCV(model, parameters, cv=10, scoring="accuracy", n_jobs=-1, verbose=1, refit=True)
+    grid_search.fit(X_train, y_train)
+    
     return grid_search.best_params_
 
 def tune_experiment(data:pd.DataFrame,target:str,Ename:str,tuneparams:dict, defaultparams:dict):

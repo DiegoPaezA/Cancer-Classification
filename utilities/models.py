@@ -106,12 +106,7 @@ def evaluate_model(model, data:pd.DataFrame, target:str,Ename:str, test_size=0.2
   model.fit(X_train, y_train)
   model_predic = model.predict(X_test)
   
-  if len(np.unique(y_test))>2:
-    model_prob = model.predict_proba(X_test)
-  else:
-    model_prob = []  
-
-  metrics = eval_performance(y_test, model_predic,model_prob)
+  metrics = eval_performance(y_test, model_predic)
   
   cv_results = {
     "Accuracy (kfold)": accuracy_kfold
