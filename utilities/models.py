@@ -40,7 +40,35 @@ def convert_to_df(results:dict):
   results_df.insert (0,"Models", models_names, True)
   return results_df
 
-
+def avg_metrics(results: list):
+  """
+  This function calculates the average metrics and std of the results of the models trained.
+  
+  Args:
+      results : list
+          The list of dictionaris with the results of the models that
+          includes the kfold accuracy, std, and predictions of trained models.
+  Returns:
+      avg_metrics : pd.DataFrame
+          A dataframe with the average metrics of the models.
+      df_avg_std : pd.DataFrame
+          A dataframe with the average std of the models.
+  """
+  avg_metrics = {}
+  avg_std = {}
+  avg_std_metrics = {}
+  #keys = results[0][0].keys()
+  for metric in results[0][0].keys():
+      avg_metrics["mean_"+metric] = np.mean(list(map(lambda x:list(map(lambda x2:x2[metric], x) ) , results)), axis=0)
+      avg_std["std_"+metric] = np.std(list(map(lambda x:list(map(lambda x2:x2[metric], x) ) , results)), axis=0)
+  avg_keys = list(avg_metrics.keys())
+  std_keys = list(avg_std.keys())
+  for i in range(len(avg_keys)):
+      avg_std_metrics[avg_keys[i]] = avg_metrics[avg_keys[i]]
+      avg_std_metrics[std_keys[i]] = avg_std[std_keys[i]]
+  df_avg_std = convert_to_df(avg_std_metrics).round(3)
+  return df_avg_std
+  
 def evaluate_model(model, data:pd.DataFrame, target:str,Ename:str, test_size=0.2):
   """
   This functions trains a model with kfold cross validation and also `model.fit`.
@@ -63,8 +91,8 @@ def evaluate_model(model, data:pd.DataFrame, target:str,Ename:str, test_size=0.2
   if Ename == "E4":
     data = oversample_data(data, target)
     if (firts_time):
-      print("Oversampling data...")
-      print("Class distribution in the oversampled data:")
+      #print("Oversampling data...")
+      #print("Class distribution in the oversampled data:")
       firts_time = False
   
   X, y = get_xy(data, target)
@@ -73,9 +101,8 @@ def evaluate_model(model, data:pd.DataFrame, target:str,Ename:str, test_size=0.2
   cv = KFold(n_splits=10, shuffle=True)
   scores_origin = cross_val_score(model, X, y, scoring='accuracy', cv=cv, n_jobs=-1)
     
-  accuracy_kfold = round(mean(scores_origin),4)
-  std_kfold = round(std(scores_origin),4)
-  
+  accuracy_kfold = mean(scores_origin)
+  std_kfold = std(scores_origin)  
   model.fit(X_train, y_train)
   model_predic = model.predict(X_test)
   
@@ -87,8 +114,8 @@ def evaluate_model(model, data:pd.DataFrame, target:str,Ename:str, test_size=0.2
   metrics = eval_performance(y_test, model_predic,model_prob)
   
   cv_results = {
-    "Accuracy (kfold)": accuracy_kfold,
-    "Std (kfold)": std_kfold
+    "Accuracy (kfold)": accuracy_kfold
+    #"Std (kfold)": std_kfold
   }
 
   result = {**cv_results, **metrics}
@@ -125,13 +152,15 @@ def run_experiment(data:pd.DataFrame,target:str,Ename:str,params:dict,num_exp:in
 
   results = []
   all_exp_results = []
+  print(f"Running experiment: ", end="")
   for num in range(num_exp):
-    print(f"Running experiment {num+1}...")
+    print(num+1, end=",")
     for name, model in models:
       #print(f"Running {name} model...")
       results.append(evaluate_model(model,data,target,Ename, test_size))
     all_exp_results.append(results)
-    results = []  
-  #results_df = convert_to_df(results)
-  return all_exp_results
+    results = []
+  print(" Done!", end=" ")  
+  avg_metrics_results = avg_metrics(all_exp_results)
+  return avg_metrics_results
 
