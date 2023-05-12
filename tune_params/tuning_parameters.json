@@ -2,9 +2,9 @@
 {
   "log_reg":{
   "C": [0.001, 0.01, 0.1, 1, 10, 100, 1000],
-  "penalty": ["l1", "l2", "elasticnet", "none"],
-  "solver": ["liblinear", "saga", "lbfgs", "newton-cg"],
-  "max_iter": [100, 1000, 10000]
+  "penalty": ["l1", "l2", "elasticnet"],
+  "solver": ["liblinear", "newton-cg"],
+  "max_iter": [100, 1000, 10000, 100000]
 },
 "naive_bayes":{
   "var_smoothing": []
