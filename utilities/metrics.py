@@ -38,12 +38,6 @@ def eval_performance(ytest: np.array, ypredict: np.array, yproba: np.array):
     f1score = f1score[-1]
     precisionscore = precisionscore[-1]
     recallscore = recallscore[-1]
-    
-  # round to 4 decimals the metrics
-  accuracyscore = round(accuracyscore,4)
-  f1score = round(f1score,4)
-  precisionscore = round(precisionscore,4)
-  recallscore = round(recallscore,4)
   
   #cohenkappa= round(cohen_kappa_score(ytest, ypredict),4)
   #multi_class = "ovr" if len(np.unique(ytest)) > 2 else "raise"
