@@ -6,8 +6,7 @@
         "var_smoothing": 1e-9
     },
     "svm": {
-        "probability": true,
-        "random_state": 42
+        "probability": true
     },
     "knn": {},
     "xgb": {}
