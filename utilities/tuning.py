@@ -47,6 +47,8 @@ def tune_hyperparameters(model,data:pd.DataFrame,target:str,Ename:str, parameter
     """
     Tune the hyperparameters of a model using GridSearchCV.
     
+    When refit=True, sklearn uses entire training set to refit the model. So, there is no test data left to estimate the performance using any scorer function.
+    
     Args:
         model
     """
@@ -62,9 +64,8 @@ def tune_hyperparameters(model,data:pd.DataFrame,target:str,Ename:str, parameter
         #     firts_time = False
             
     X, y = get_xy(data, target)
-    X_train, X_test, y_train, y_test = split_data(X, y)
-    grid_search = GridSearchCV(model, parameters, cv=10, scoring="accuracy", n_jobs=-1, verbose=1, refit=True)
-    grid_search.fit(X_train, y_train)
+    grid_search = GridSearchCV(model, parameters, cv=10, scoring="balanced_accuracy", n_jobs=-1, verbose=1, refit=True)
+    grid_search.fit(X, y)
     
     return grid_search.best_params_
 
