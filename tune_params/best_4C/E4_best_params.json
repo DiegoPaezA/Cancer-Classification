@@ -1,17 +1,17 @@
 {
     "log_reg": {
-        "C": 0.001,
+        "C": 0.1,
         "max_iter": 100,
-        "penalty": "l1",
+        "penalty": "l2",
         "solver": "liblinear"
     },
     "naive_bayes": {
-        "var_smoothing": 1.0
+        "var_smoothing": 0.008829699955494092
     },
     "svm": {
-        "C": 0.1,
+        "C": 1.5,
         "gamma": 1,
-        "kernel": "linear","probability": true
+        "kernel": "rbf"
     },
     "knn": {
         "algorithm": "auto",
@@ -21,11 +21,11 @@
         "weights": "uniform"
     },
     "xgb": {
-        "colsample_bytree": 0.5,
+        "colsample_bytree": 0.6,
         "gamma": 0.15,
-        "learning_rate": 0.001,
-        "max_depth": 4,
-        "reg_lambda": 0.0,
-        "subsample": 0.5
+        "learning_rate": 0.05,
+        "max_depth": 15,
+        "reg_lambda": 0.5,
+        "subsample": 1.0
     }
 }
